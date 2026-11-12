@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MySnackMachine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MySnackMachine/MySnackMachine.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
