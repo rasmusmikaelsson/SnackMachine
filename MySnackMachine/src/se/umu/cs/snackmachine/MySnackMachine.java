@@ -11,6 +11,11 @@ public class MySnackMachine extends JFrame {
     private static final DateTimeFormatter TIME_FORMAT =
             DateTimeFormatter.ofPattern("HH:mm:ss");
 
+    private static final int PRODUCT_COLUMNS = 2;
+    private static final int PRODUCT_GAP = 12;
+    private static final int PRODUCT_CARD_HEIGHT = 120;
+    private static final int PRODUCT_VIEW_HEIGHT = 310;
+
     private final SnackMachine machine = new SnackMachine();
     private final JLabel balanceLabel = new JLabel();
     private final JTextArea receiptLog = new JTextArea();
@@ -26,11 +31,26 @@ public class MySnackMachine extends JFrame {
         content.setBorder(new EmptyBorder(16, 16, 16, 16));
         setContentPane(content);
 
-        JPanel productGrid = new JPanel(new GridLayout(2, 2, 12, 12));
+        JPanel productGrid = new JPanel(
+                new GridLayout(0, PRODUCT_COLUMNS, PRODUCT_GAP, PRODUCT_GAP));
         for (Product product : products) {
             productGrid.add(createProductCard(product));
         }
-        productGrid.setPreferredSize(new Dimension(600, 260));
+
+        int rows = (products.size() + PRODUCT_COLUMNS - 1) / PRODUCT_COLUMNS;
+        int gridHeight = rows * PRODUCT_CARD_HEIGHT
+                + Math.max(0, rows - 1) * PRODUCT_GAP;
+        productGrid.setPreferredSize(new Dimension(600, gridHeight));
+
+        JScrollPane productScrollPane = new JScrollPane(productGrid);
+        productScrollPane.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        productScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        productScrollPane.setPreferredSize(
+                new Dimension(600, Math.min(PRODUCT_VIEW_HEIGHT, gridHeight + 4)));
+        productScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        productScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         JPanel controlPanel = new JPanel(new BorderLayout(10, 10));
         JPanel moneyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
@@ -123,7 +143,10 @@ public class MySnackMachine extends JFrame {
         } catch (Exception ignored) {}
 
         List<Product> products = List.of(
-                new Soda(), new Chips(), new Chocolate(), new Water());
+                new Soda(),
+                new Chips(),
+                new Chocolate(),
+                new Water());
         SwingUtilities.invokeLater(() -> new MySnackMachine(products).setVisible(true));
     }
 }

@@ -13,9 +13,6 @@ public class SnackMachine {
         balance = Math.addExact(balance, kronor);
     }
 
-    /**
-     * Check funding before successful purchase.
-     */
     public void buy(Product product)
             throws InsufficientFundsException, OutOfStockException {
         if (balance < product.getPrice()) {
